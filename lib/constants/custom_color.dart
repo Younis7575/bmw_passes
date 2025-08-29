@@ -7,4 +7,5 @@ class CustomColor {
   static const Color emailpasswors = Color(0xff6F6F6F);
   static const Color slider = Color(0xffD9D9D9);
   static const Color dot = Color(0xffE22718);
+  static const Color fieldbackgroun = Color(0xffF1F4FF);
 }

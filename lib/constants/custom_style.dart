@@ -14,7 +14,7 @@ class CustomStyle {
   static TextStyle loginText = GoogleFonts.plusJakartaSans(
     fontWeight: FontWeight.w700,
     fontSize: 36,
-    height: 40, // 40%
+    height: 0, // 40%
     letterSpacing: 0, // 0%
     color: CustomColor.mainText,
   );
@@ -22,7 +22,7 @@ class CustomStyle {
   static TextStyle contentText = GoogleFonts.plusJakartaSans(
     fontWeight: FontWeight.w400,
     fontSize: 16,
-    height: 100, // 100%
+    height: 0, // 100%
     letterSpacing: 0, // 0%
     color: CustomColor.contentText,
   );
@@ -30,7 +30,7 @@ class CustomStyle {
   static TextStyle formfield = GoogleFonts.plusJakartaSans(
     fontWeight: FontWeight.w500,
     fontSize: 16,
-    height: 100, // 100%
+    height: 0, // 100%
     letterSpacing: 0, // 0%
     color: CustomColor.contentText,
   );
@@ -38,7 +38,7 @@ class CustomStyle {
   static TextStyle buttonText = GoogleFonts.plusJakartaSans(
     fontWeight: FontWeight.w600,
     fontSize: 20,
-    height: 100, // 100%
+    height: 0, // 100%
     letterSpacing: 0, // 0%
     color: CustomColor.contentText,
   );

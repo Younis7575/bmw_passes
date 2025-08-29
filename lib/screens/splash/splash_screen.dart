@@ -1,7 +1,8 @@
+import 'package:bmw_passes/constants/custom_color.dart';
+import 'package:bmw_passes/constants/custom_style.dart';
 import 'package:bmw_passes/screens/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -11,7 +12,7 @@ class SplashScreen extends StatelessWidget {
     final controller = Get.put(SplashController());
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CustomColor.screenBackground,
       body: Center(
         child: AnimatedBuilder(
           animation: controller.animationController,
@@ -35,12 +36,7 @@ class SplashScreen extends StatelessWidget {
                   opacity: controller.fadeAnimation.value,
                   child: Text(
                     "BMW M", // your app name
-                    style: TextStyle(
-                      fontSize: Get.width * 0.07,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      letterSpacing: 1.2,
-                    ),
+                    style: CustomStyle.mainText,
                   ),
                 ),
               ],
@@ -51,4 +47,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-
