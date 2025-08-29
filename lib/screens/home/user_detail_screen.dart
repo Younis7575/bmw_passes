@@ -1,9 +1,8 @@
 import 'package:bmw_passes/constants/custom_style.dart';
 import 'package:flutter/material.dart';
 
-// Main Profile Screen
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class UserDetailScreen extends StatelessWidget {
+  const UserDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
                     radius: 50,
                     backgroundImage: NetworkImage(
                       "https://i.pravatar.cc/150?img=3",
-                    ), // placeholder
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.all(4),
@@ -50,10 +49,8 @@ class ProfileScreen extends StatelessWidget {
 
               // Name + subtitle
               Text("John Adams", style: CustomStyle.loginText),
-              Text(
-                "Lorem Ipsum is simply dummy text",
-                style: CustomStyle.contentText,
-              ),
+              Text("Lorem Ipsum is simply dummy text",
+                  style: CustomStyle.contentText),
               const SizedBox(height: 24),
 
               // Personal Info Section
@@ -64,50 +61,31 @@ class ProfileScreen extends StatelessWidget {
               ),
               const Row(
                 children: [
-                  Expanded(
-                    child: InfoCard(label: "First Name:", value: "John"),
-                  ),
+                  Expanded(child: InfoCard(label: "First Name:", value: "John")),
                   SizedBox(width: 8),
-                  Expanded(
-                    child: InfoCard(label: "Last Name:", value: "Adams"),
-                  ),
+                  Expanded(child: InfoCard(label: "Last Name:", value: "Adams")),
                 ],
               ),
               const InfoCard(label: "Email:", value: "johnadams7224@gmail.com"),
               const Row(
                 children: [
-                  Expanded(
-                    child: InfoCard(label: "Contact:", value: "756756567658"),
-                  ),
+                  Expanded(child: InfoCard(label: "Contact:", value: "756756567658")),
                   SizedBox(width: 8),
-                  Expanded(
-                    child: InfoCard(
-                      label: "Date Of Birth:",
-                      value: "2001-02-04",
-                    ),
-                  ),
+                  Expanded(child: InfoCard(label: "Date Of Birth:", value: "2001-02-04")),
                 ],
               ),
               const InfoCard(label: "Preferred Language:", value: "English"),
               const Row(
                 children: [
-                  Expanded(
-                    child: InfoCard(label: "City:", value: "Taxila Cantt"),
-                  ),
+                  Expanded(child: InfoCard(label: "City:", value: "Taxila Cantt")),
                   SizedBox(width: 8),
-                  Expanded(
-                    child: InfoCard(
-                      label: "Country/State:",
-                      value: "Atlantic Islands",
-                    ),
-                  ),
+                  Expanded(child: InfoCard(label: "Country/State:", value: "Atlantic Islands")),
                 ],
               ),
 
               const SizedBox(height: 20),
               const SectionTitle(title: "Others"),
 
-              // Others Section
               Row(
                 children: [
                   Expanded(
@@ -121,13 +99,9 @@ class ProfileScreen extends StatelessWidget {
               ),
               const Row(
                 children: [
-                  Expanded(
-                    child: InfoCard(label: "M Model:", value: "4546"),
-                  ),
+                  Expanded(child: InfoCard(label: "M Model:", value: "4546")),
                   SizedBox(width: 8),
-                  Expanded(
-                    child: InfoCard(label: "VIN Model:", value: "5656"),
-                  ),
+                  Expanded(child: InfoCard(label: "VIN Model:", value: "5656")),
                 ],
               ),
               const InfoCard(label: "Network ID:", value: "465465768787564"),
@@ -150,15 +124,7 @@ class SectionTitle extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1565C0), // blue
-            letterSpacing: 0.5,
-          ),
-        ),
+        child: Text(title, style: CustomStyle.sectionTitle),
       ),
     );
   }
@@ -193,19 +159,9 @@ class InfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
-                  ),
-                ),
+                Text(label, style: CustomStyle.infoLabel),
                 const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
-                ),
+                Text(value, style: CustomStyle.infoValue),
               ],
             ),
           ),

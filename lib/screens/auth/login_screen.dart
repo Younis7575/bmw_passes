@@ -2,7 +2,7 @@ import 'package:bmw_passes/constants/Text_Field_Widget.dart';
 import 'package:bmw_passes/constants/custom_button.dart';
 import 'package:bmw_passes/constants/custom_color.dart';
 import 'package:bmw_passes/constants/custom_style.dart';
-import 'package:bmw_passes/screens/home/home_screen.dart';
+import 'package:bmw_passes/screens/home/qe_code_scanning_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import '../../widgets/custom_text_field.dart';
