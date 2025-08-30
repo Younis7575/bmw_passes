@@ -1,3 +1,4 @@
+import 'package:bmw_passes/constants/custom_color.dart';
 import 'package:bmw_passes/constants/custom_style.dart';
 import 'package:flutter/material.dart';
 
@@ -49,8 +50,10 @@ class UserDetailScreen extends StatelessWidget {
 
               // Name + subtitle
               Text("John Adams", style: CustomStyle.loginText),
-              Text("Lorem Ipsum is simply dummy text",
-                  style: CustomStyle.contentText),
+              Text(
+                "Lorem Ipsum is simply dummy text",
+                style: CustomStyle.contentText,
+              ),
               const SizedBox(height: 24),
 
               // Personal Info Section
@@ -61,25 +64,43 @@ class UserDetailScreen extends StatelessWidget {
               ),
               const Row(
                 children: [
-                  Expanded(child: InfoCard(label: "First Name:", value: "John")),
+                  Expanded(
+                    child: InfoCard(label: "First Name:", value: "John"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Last Name:", value: "Adams")),
+                  Expanded(
+                    child: InfoCard(label: "Last Name:", value: "Adams"),
+                  ),
                 ],
               ),
               const InfoCard(label: "Email:", value: "johnadams7224@gmail.com"),
               const Row(
                 children: [
-                  Expanded(child: InfoCard(label: "Contact:", value: "756756567658")),
+                  Expanded(
+                    child: InfoCard(label: "Contact:", value: "756756567658"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Date Of Birth:", value: "2001-02-04")),
+                  Expanded(
+                    child: InfoCard(
+                      label: "Date Of Birth:",
+                      value: "2001-02-04",
+                    ),
+                  ),
                 ],
               ),
               const InfoCard(label: "Preferred Language:", value: "English"),
               const Row(
                 children: [
-                  Expanded(child: InfoCard(label: "City:", value: "Taxila Cantt")),
+                  Expanded(
+                    child: InfoCard(label: "City:", value: "Taxila Cantt"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Country/State:", value: "Atlantic Islands")),
+                  Expanded(
+                    child: InfoCard(
+                      label: "Country/State:",
+                      value: "Atlantic Islands",
+                    ),
+                  ),
                 ],
               ),
 
@@ -90,7 +111,7 @@ class UserDetailScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: InfoCard(
-                      label: "Pass Type:",
+                      label: "Pass Type:  ",
                       value: "BMW M Accessorized",
                       leading: Icon(Icons.directions_car, color: Colors.black),
                     ),
@@ -99,9 +120,13 @@ class UserDetailScreen extends StatelessWidget {
               ),
               const Row(
                 children: [
-                  Expanded(child: InfoCard(label: "M Model:", value: "4546")),
+                  Expanded(
+                    child: InfoCard(label: "M Model:", value: "4546"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "VIN Model:", value: "5656")),
+                  Expanded(
+                    child: InfoCard(label: "VIN Model:", value: "5656"),
+                  ),
                 ],
               ),
               const InfoCard(label: "Network ID:", value: "465465768787564"),
@@ -149,7 +174,7 @@ class InfoCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.blue.withOpacity(0.3)),
+        border: Border.all(color: CustomColor.contentText),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -159,9 +184,19 @@ class InfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: CustomStyle.infoLabel),
+                Text(
+                  label,
+                  style: CustomStyle.infoLabel.copyWith(
+                    color: CustomColor.mainText,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(value, style: CustomStyle.infoValue),
+                Text(
+                  value,
+                  style: CustomStyle.infoValue.copyWith(
+                    color: CustomColor.contentText,
+                  ),
+                ),
               ],
             ),
           ),

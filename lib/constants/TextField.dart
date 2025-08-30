@@ -1,3 +1,4 @@
+import 'package:bmw_passes/constants/custom_style.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -20,14 +21,10 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
-      style: const TextStyle(fontSize: 14, color: Colors.black87),
+      style: CustomStyle.contentText,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: Colors.blueGrey,
-        ),
+        labelStyle: CustomStyle.sectionTitle,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 10,
