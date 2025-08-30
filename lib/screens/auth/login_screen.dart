@@ -45,9 +45,9 @@ class LoginScreen extends StatelessWidget {
                   Column(
                     children: [
                       CustomTextField(
-                        hintText: "Email",
-                        controller: controller.emailController,
-                        validator: controller.validateEmail,
+                        hintText: "Username",
+                        controller: controller.usernameController,
+                        validator: controller.validateUsername,
                       ),
                       const SizedBox(height: 15),
                       CustomTextField(
@@ -56,19 +56,20 @@ class LoginScreen extends StatelessWidget {
                         controller: controller.passwordController,
                         validator: controller.validatePassword,
                       ),
+
                     ],
                   ),
 
                   const SizedBox(height: 35),
-                  CustomButton(
-                    text: "Sign in",
+                  Obx(() => CustomButton(
+                    text: controller.isLoading.value ? "Loading..." : "Sign in",
                     onPressed: () {
-                      if (controller.formKey.currentState!.validate()) {
+                      if (!controller.isLoading.value) {
                         controller.login();
-                        Get.to(() => const QrScanScreen());
                       }
                     },
-                  ),
+                  )),
+
                 ],
               ),
             ),

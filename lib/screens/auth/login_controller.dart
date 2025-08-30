@@ -1,39 +1,27 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'login_model.dart';
+import '../home/qe_code_scanning_screen.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
+  var isLoading = false.obs;
 
-  // Validation for Email
-  String? validateEmail(String? value) {
+  // Username Validation
+  String? validateUsername(String? value) {
     if (value == null || value.isEmpty) {
-      return "Email cannot be empty";
+      return "Username cannot be empty";
     }
-
-    // Allowed domains
-    final allowedDomains = [
-      "gmail.com",
-      "yahoo.com",
-      "outlook.com",
-      "hotmail.com",
-    ];
-
-    if (!value.contains("@")) {
-      return "Enter a valid email with @";
-    }
-
-    final domain = value.split("@").last;
-    if (!allowedDomains.contains(domain)) {
-      return "Only Gmail, Yahoo, Outlook, and Hotmail are allowed";
-    }
-
-    return null; // ✅ Valid
+    return null;
   }
 
-  // Validation for Password
+  // Password Validation
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return "Password cannot be empty";
@@ -41,32 +29,66 @@ class LoginController extends GetxController {
     return null;
   }
 
-  // Login Function
-  void login() {
-    if (formKey.currentState!.validate()) {
-      // If validation passes
-      Get.snackbar(
-        "Success",
-        "Login Successful",
-        snackPosition: SnackPosition.BOTTOM,
+  // Login Function with API
+  Future<void> login() async {
+    if (!formKey.currentState!.validate()) return;
+
+    isLoading.value = true;
+    try {
+      var url = Uri.parse(
+        "https://spmetesting.com/api/auth/login.php",
+      ); // replace with actual login endpoint
+      var response = await http.post(
+        url,
+        headers: {
+          "Accept": "application/json",
+          "X-APP-SECRET": "73706d652d6170706c69636174696f6e2d373836",
+        },
+        body: {
+          "user_name": usernameController.text.trim(),
+          "password": passwordController.text.trim(),
+        },
       );
 
-      // Navigate to QR screen
-      // You can replace this with API call
-    } else {
+      log("Login response=> ${response.body}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log("Login Status=> ${response.statusCode}");
+        var data = jsonDecode(response.body);
+        var loginModel = LoginModel.fromJson(data);
+
+        Get.snackbar(
+          "Success",
+          loginModel.message,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+
+        // Navigate to QR Screen
+        Get.offAll(() => const QrScanScreen());
+      } else {
+        Get.snackbar(
+          "Error",
+          "Login failed",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
       Get.snackbar(
         "Error",
-        "Please fix errors",
+        e.toString(),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 
   @override
   void onClose() {
-    emailController.dispose();
+    usernameController.dispose();
     passwordController.dispose();
     super.onClose();
   }
