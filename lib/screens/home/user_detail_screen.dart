@@ -205,6 +205,159 @@
 //     );
 //   }
 // }
+// import 'package:bmw_passes/constants/custom_color.dart';
+// import 'package:flutter/material.dart';
+
+// import '../../constants/custom_style.dart';
+// import '../../constants/info_card.dart';
+// import '../../constants/section_title.dart';
+
+// class UserDetailScreen extends StatelessWidget {
+//   const UserDetailScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: CustomColor.screenBackground,
+//       body: SafeArea(
+//         child: SingleChildScrollView(
+//           padding: const EdgeInsets.all(16),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               // Back arrow
+//               Align(
+//                 alignment: Alignment.centerLeft,
+//                 child: IconButton(
+//                   icon: Icon(Icons.arrow_back, color: CustomColor.mainText),
+//                   onPressed: () {
+//                     Navigator.pop(context); // Go back to previous screen
+//                   },
+//                 ),
+//               ),
+
+//               const SizedBox(height: 20),
+
+//               // Profile Image + Verified Badge
+//               Stack(
+//                 alignment: Alignment.bottomRight,
+//                 children: [
+//                   const CircleAvatar(
+//                     radius: 50,
+//                     backgroundImage: NetworkImage(
+//                       "https://i.pravatar.cc/150?img=3",
+//                     ),
+//                   ),
+//                   Container(
+//                     width: 24,
+//                     height: 24,
+//                     decoration: BoxDecoration(
+//                       color: CustomColor.dot,
+//                       borderRadius: BorderRadius.circular(4),
+//                     ),
+//                     alignment: Alignment.center, // centers the child
+//                     child: const Icon(
+//                       Icons.verified,
+//                       color: CustomColor.screenBackground,
+//                       size: 20,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               const SizedBox(height: 12),
+
+//               // Name + subtitle
+//               Text("John Adams", style: CustomStyle.loginText),
+//               Text(
+//                 "Lorem Ipsum is simply dummy text",
+//                 style: CustomStyle.contentText,
+//               ),
+//               const SizedBox(height: 24),
+
+//               // Personal Info Section
+//               const SectionTitle(title: "Personal Information"),
+//               const InfoCard(
+//                 label: "Customer Id:",
+//                 value: "BHCHCDVFDYG7e7eee76r7e6rSY",
+//               ),
+//               const Row(
+//                 children: [
+//                   Expanded(
+//                     child: InfoCard(label: "First Name:", value: "John"),
+//                   ),
+//                   SizedBox(width: 8),
+//                   Expanded(
+//                     child: InfoCard(label: "Last Name:", value: "Adams"),
+//                   ),
+//                 ],
+//               ),
+//               const InfoCard(label: "Email:", value: "johnadams7224@gmail.com"),
+//               const Row(
+//                 children: [
+//                   Expanded(
+//                     child: InfoCard(label: "Contact:", value: "756756567658"),
+//                   ),
+//                   SizedBox(width: 8),
+//                   Expanded(
+//                     child: InfoCard(
+//                       label: "Date Of Birth:",
+//                       value: "2001-02-04",
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               const InfoCard(label: "Preferred Language:", value: "English"),
+//               const Row(
+//                 children: [
+//                   Expanded(
+//                     child: InfoCard(label: "City:", value: "Taxila Cantt"),
+//                   ),
+//                   SizedBox(width: 8),
+//                   Expanded(
+//                     child: InfoCard(
+//                       label: "Country/State:",
+//                       value: "Atlantic Islands",
+//                     ),
+//                   ),
+//                 ],
+//               ),
+
+//               const SizedBox(height: 20),
+//               const SectionTitle(title: "Others"),
+
+//               Row(
+//                 children: [
+//                   Expanded(
+//                     child: InfoCard(
+//                       label: "Pass Type:",
+//                       value: "BMW M Accessorized",
+//                       leading: Icon(Icons.directions_car, color: Colors.black),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+
+//               const Row(
+//                 children: [
+//                   Expanded(
+//                     child: InfoCard(label: "M Model:", value: "4546"),
+//                   ),
+//                   SizedBox(width: 8),
+//                   Expanded(
+//                     child: InfoCard(label: "VIN Model:", value: "5656"),
+//                   ),
+//                 ],
+//               ),
+//               const InfoCard(label: "Network ID:", value: "465465768787564"),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+import 'package:bmw_passes/constants/custom_color.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/custom_style.dart';
@@ -216,54 +369,76 @@ class UserDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final avatarRadius = size.width * 0.18; // responsive avatar size
+    final spacing = size.height * 0.02; // responsive vertical spacing
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CustomColor.screenBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.04,
+            vertical: spacing,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Back arrow
               Align(
                 alignment: Alignment.centerLeft,
-                child: Icon(Icons.arrow_back, color: Colors.blue[800]),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back, color: CustomColor.mainText),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-              const SizedBox(height: 20),
+
+              SizedBox(height: spacing),
 
               // Profile Image + Verified Badge
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(
+                  CircleAvatar(
+                    radius: avatarRadius,
+                    backgroundImage: const NetworkImage(
                       "https://i.pravatar.cc/150?img=3",
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+                    width: avatarRadius * 0.35,
+                    height: avatarRadius * 0.35,
+                    decoration: BoxDecoration(
+                      color: CustomColor.dot,
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                    child: const Icon(
+                    alignment: Alignment.center,
+                    child: Icon(
                       Icons.verified,
-                      color: Colors.white,
-                      size: 20,
+                      color: CustomColor.screenBackground,
+                      size: avatarRadius * 0.25,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+
+              SizedBox(height: spacing * 0.6),
 
               // Name + subtitle
-              Text("John Adams", style: CustomStyle.loginText),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("John Adams", style: CustomStyle.loginText),
+              ),
+              SizedBox(height: spacing * 0.3),
               Text(
                 "Lorem Ipsum is simply dummy text",
                 style: CustomStyle.contentText,
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+
+              SizedBox(height: spacing),
 
               // Personal Info Section
               const SectionTitle(title: "Personal Information"),
@@ -271,31 +446,49 @@ class UserDetailScreen extends StatelessWidget {
                 label: "Customer Id:",
                 value: "BHCHCDVFDYG7e7eee76r7e6rSY",
               ),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "First Name:", value: "John")),
+              Row(
+                children: const [
+                  Expanded(
+                    child: InfoCard(label: "First Name:", value: "John"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Last Name:", value: "Adams")),
+                  Expanded(
+                    child: InfoCard(label: "Last Name:", value: "Adams"),
+                  ),
                 ],
               ),
               const InfoCard(label: "Email:", value: "johnadams7224@gmail.com"),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "Contact:", value: "756756567658")),
+              Row(
+                children: const [
+                  Expanded(
+                    child: InfoCard(label: "Contact:", value: "756756567658"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Date Of Birth:", value: "2001-02-04")),
+                  Expanded(
+                    child: InfoCard(
+                      label: "Date Of Birth:",
+                      value: "2001-02-04",
+                    ),
+                  ),
                 ],
               ),
               const InfoCard(label: "Preferred Language:", value: "English"),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "City:", value: "Taxila Cantt")),
+              Row(
+                children: const [
+                  Expanded(
+                    child: InfoCard(label: "City:", value: "Taxila Cantt"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Country/State:", value: "Atlantic Islands")),
+                  Expanded(
+                    child: InfoCard(
+                      label: "Country/State:",
+                      value: "Atlantic Islands",
+                    ),
+                  ),
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: spacing),
               const SectionTitle(title: "Others"),
 
               Row(
@@ -304,16 +497,23 @@ class UserDetailScreen extends StatelessWidget {
                     child: InfoCard(
                       label: "Pass Type:",
                       value: "BMW M Accessorized",
-                      leading: Icon(Icons.directions_car, color: Colors.black),
+                      leading: Icon(
+                        Icons.directions_car,
+                        color: CustomColor.mainText,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "M Model:", value: "4546")),
+              Row(
+                children: const [
+                  Expanded(
+                    child: InfoCard(label: "M Model:", value: "4546"),
+                  ),
                   SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "VIN Model:", value: "5656")),
+                  Expanded(
+                    child: InfoCard(label: "VIN Model:", value: "5656"),
+                  ),
                 ],
               ),
               const InfoCard(label: "Network ID:", value: "465465768787564"),

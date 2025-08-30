@@ -1,3 +1,321 @@
+// import 'package:bmw_passes/constants/custom_color.dart';
+// import 'package:bmw_passes/screens/home/user_detail_screen.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:mobile_scanner/mobile_scanner.dart';
+
+// class QrScanScreen extends StatefulWidget {
+//   const QrScanScreen({super.key});
+
+//   @override
+//   State<QrScanScreen> createState() => _QrScanScreenState();
+// }
+
+// class _QrScanScreenState extends State<QrScanScreen>
+//     with SingleTickerProviderStateMixin {
+//   final MobileScannerController controller = MobileScannerController();
+//   String? qrResult;
+//   double zoomValue = 0.0;
+
+//   late AnimationController _animController;
+//   late Animation<double> _positionAnimation;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     // 🔴 Scanning line animation
+//     _animController = AnimationController(
+//       vsync: this,
+//       duration: const Duration(seconds: 2),
+//     )..repeat(reverse: true);
+
+//     _positionAnimation = Tween<double>(
+//       begin: -1,
+//       end: 1,
+//     ).animate(_animController);
+//   }
+
+//   @override
+//   void dispose() {
+//     _animController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final double boxWidth = MediaQuery.of(context).size.width * 0.80; // wider
+//     final double boxHeight =
+//         MediaQuery.of(context).size.height * 0.35; // taller
+//     const double topOffset = 170; // move down from top
+
+//     return Scaffold(
+//       body: SafeArea(
+//         child: Stack(
+//           children: [
+//             /// 📷 Camera Scanner
+//             MobileScanner(
+//               controller: controller,
+//               onDetect: (capture) {
+//                 final List<Barcode> barcodes = capture.barcodes;
+//                 for (final barcode in barcodes) {
+//                   setState(() {
+//                     qrResult = barcode.rawValue;
+//                   });
+//                 }
+//               },
+//             ),
+
+//             /// 🌓 Overlay with transparent box
+//             ColorFiltered(
+//               colorFilter: ColorFilter.mode(
+//                 CustomColor.screenBackground,
+//                 BlendMode.srcOut,
+//               ),
+//               child: Stack(
+//                 children: [
+//                   Container(
+//                     decoration: const BoxDecoration(
+//                       color: Colors.black,
+//                       backgroundBlendMode: BlendMode.dstOut,
+//                     ),
+//                   ),
+//                   Align(
+//                     alignment: Alignment.topCenter,
+//                     child: Padding(
+//                       padding: const EdgeInsets.only(top: topOffset),
+//                       child: Container(
+//                         width: boxWidth,
+//                         height: boxHeight,
+//                         decoration: BoxDecoration(
+//                           color: Colors.white,
+//                           borderRadius: BorderRadius.circular(16),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+
+//             /// 🔵 Blue corners
+//             Align(
+//               alignment: Alignment.topCenter,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(top: topOffset),
+//                 child: SizedBox(
+//                   width: boxWidth,
+//                   height: boxHeight,
+//                   child: Stack(
+//                     children: [
+//                       _buildCorner(Alignment.topLeft),
+//                       _buildCorner(Alignment.topRight),
+//                       _buildCorner(Alignment.bottomLeft),
+//                       _buildCorner(Alignment.bottomRight),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+
+//             /// 🔴 Animated Red Line
+//             Align(
+//               alignment: Alignment.topCenter,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(top: topOffset),
+//                 child: SizedBox(
+//                   width: boxWidth,
+//                   height: boxHeight,
+//                   child: AnimatedBuilder(
+//                     animation: _positionAnimation,
+//                     builder: (context, child) {
+//                       return Align(
+//                         alignment: Alignment(0, _positionAnimation.value),
+//                         child: Container(
+//                           width: boxWidth,
+//                           height: 3,
+//                           color: Colors.red,
+//                         ),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ),
+//             ),
+
+//             /// 🔙 Back Button
+//             Positioned(
+//               top: 10,
+//               left: 10,
+//               child: IconButton(
+//                 icon: const Icon(
+//                   Icons.arrow_back,
+//                   color: CustomColor.mainText,
+//                   size: 25,
+//                 ),
+//                 onPressed: () => Get.back(),
+//               ),
+//             ),
+
+//             /// 📏 Zoom Slider + Scan Button (Bottom Section)
+//             Align(
+//               alignment: Alignment.bottomCenter,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(bottom: 20),
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     // 📏 Zoom Slider with - and +
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                       child: Row(
+//                         children: [
+//                           const Icon(Icons.remove, color: CustomColor.slider),
+//                           Expanded(
+//                             child: SliderTheme(
+//                               data: SliderTheme.of(context).copyWith(
+//                                 thumbShape: const ShadowSliderThumbShape(
+//                                   thumbRadius: 6,
+//                                 ),
+//                               ),
+//                               child: Slider(
+//                                 value: zoomValue,
+//                                 min: 0.0,
+//                                 max: 1.0,
+//                                 activeColor: Colors.red,
+//                                 onChanged: (val) async {
+//                                   setState(() => zoomValue = val);
+//                                   await controller.setZoomScale(val);
+//                                 },
+//                               ),
+//                             ),
+//                           ),
+//                           const Icon(Icons.add, color: CustomColor.slider),
+//                         ],
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 20),
+
+//                     // 🔘 Scan Button
+//                     Padding(
+//                       padding: const EdgeInsets.all(20),
+//                       child: SizedBox(
+//                         width: 364,
+//                         height: 67,
+//                         child: GestureDetector(
+//                           onTap: () {
+//                             Get.to(() => const UserDetailScreen());
+//                           },
+//                           child: Stack(
+//                             clipBehavior: Clip.none,
+//                             children: [
+//                               Container(
+//                                 decoration: BoxDecoration(
+//                                   color: CustomColor.mainText,
+//                                   borderRadius: BorderRadius.circular(12),
+//                                 ),
+//                               ),
+//                               Positioned(
+//                                 left: 120,
+//                                 top: -40,
+//                                 child: Image.asset(
+//                                   "assets/images/QR.1.png",
+//                                   width: 90,
+//                                   height: 90,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   /// 🔵 Build only blue corner edges
+//   Widget _buildCorner(Alignment alignment) {
+//     return Align(
+//       alignment: alignment,
+//       child: Container(
+//         width: 60,
+//         height: 60,
+//         decoration: BoxDecoration(
+//           // borderRadius: BorderRadius.circular(10),
+//           border: Border(
+//             top:
+//                 alignment == Alignment.topLeft ||
+//                     alignment == Alignment.topRight
+//                 ? const BorderSide(color: Colors.blue, width: 15)
+//                 : BorderSide.none,
+//             left:
+//                 alignment == Alignment.topLeft ||
+//                     alignment == Alignment.bottomLeft
+//                 ? const BorderSide(color: Colors.blue, width: 15)
+//                 : BorderSide.none,
+//             right:
+//                 alignment == Alignment.topRight ||
+//                     alignment == Alignment.bottomRight
+//                 ? const BorderSide(color: Colors.blue, width: 15)
+//                 : BorderSide.none,
+//             bottom:
+//                 alignment == Alignment.bottomLeft ||
+//                     alignment == Alignment.bottomRight
+//                 ? const BorderSide(color: Colors.blue, width: 15)
+//                 : BorderSide.none,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// /// ✅ Custom thumb with shadow
+// class ShadowSliderThumbShape extends SliderComponentShape {
+//   final double thumbRadius;
+
+//   const ShadowSliderThumbShape({this.thumbRadius = 8});
+
+//   @override
+//   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
+//     return Size.fromRadius(thumbRadius);
+//   }
+
+//   @override
+//   void paint(
+//     PaintingContext context,
+//     Offset center, {
+//     required Animation<double> activationAnimation,
+//     required Animation<double> enableAnimation,
+//     required bool isDiscrete,
+//     required TextPainter labelPainter,
+//     required RenderBox parentBox,
+//     required SliderThemeData sliderTheme,
+//     required TextDirection textDirection,
+//     required double value,
+//     required double textScaleFactor,
+//     required Size sizeWithOverflow,
+//   }) {
+//     final Canvas canvas = context.canvas;
+
+//     final shadowPaint = Paint()
+//       ..color = Colors.black.withOpacity(0.3)
+//       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+//     canvas.drawCircle(center, thumbRadius + 2, shadowPaint);
+
+//     final thumbPaint = Paint()..color = sliderTheme.thumbColor ?? Colors.red;
+//     canvas.drawCircle(center, thumbRadius, thumbPaint);
+//   }
+// }
+
 import 'package:bmw_passes/constants/custom_color.dart';
 import 'package:bmw_passes/screens/home/user_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +342,6 @@ class _QrScanScreenState extends State<QrScanScreen>
   void initState() {
     super.initState();
 
-    // 🔴 Scanning line animation
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -44,16 +361,19 @@ class _QrScanScreenState extends State<QrScanScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double boxWidth = MediaQuery.of(context).size.width * 0.80; // wider
-    final double boxHeight =
-        MediaQuery.of(context).size.height * 0.35; // taller
-    const double topOffset = 170; // move down from top
+    final size = MediaQuery.of(context).size;
+
+    final double boxWidth = size.width * 0.8;
+    final double boxHeight = size.height * 0.35;
+    final double topOffset = size.height * 0.2;
+    final double cornerSize = size.width * 0.15; // scale corners
+    final double borderWidth = size.width * 0.04;
 
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            /// 📷 Camera Scanner
+            // Camera
             MobileScanner(
               controller: controller,
               onDetect: (capture) {
@@ -66,7 +386,7 @@ class _QrScanScreenState extends State<QrScanScreen>
               },
             ),
 
-            /// 🌓 Overlay with transparent box
+            // Overlay with transparent box
             ColorFiltered(
               colorFilter: ColorFilter.mode(
                 CustomColor.screenBackground,
@@ -83,12 +403,12 @@ class _QrScanScreenState extends State<QrScanScreen>
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: topOffset),
+                      padding: EdgeInsets.only(top: topOffset),
                       child: Container(
                         width: boxWidth,
                         height: boxHeight,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: CustomColor.screenBackground,
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
@@ -98,31 +418,39 @@ class _QrScanScreenState extends State<QrScanScreen>
               ),
             ),
 
-            /// 🔵 Blue corners
+            // Blue corners
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: const EdgeInsets.only(top: topOffset),
+                padding: EdgeInsets.only(top: topOffset),
                 child: SizedBox(
                   width: boxWidth,
                   height: boxHeight,
                   child: Stack(
                     children: [
-                      _buildCorner(Alignment.topLeft),
-                      _buildCorner(Alignment.topRight),
-                      _buildCorner(Alignment.bottomLeft),
-                      _buildCorner(Alignment.bottomRight),
+                      _buildCorner(Alignment.topLeft, cornerSize, borderWidth),
+                      _buildCorner(Alignment.topRight, cornerSize, borderWidth),
+                      _buildCorner(
+                        Alignment.bottomLeft,
+                        cornerSize,
+                        borderWidth,
+                      ),
+                      _buildCorner(
+                        Alignment.bottomRight,
+                        cornerSize,
+                        borderWidth,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
 
-            /// 🔴 Animated Red Line
+            // Animated Red Line
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: const EdgeInsets.only(top: topOffset),
+                padding: EdgeInsets.only(top: topOffset),
                 child: SizedBox(
                   width: boxWidth,
                   height: boxHeight,
@@ -134,7 +462,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                         child: Container(
                           width: boxWidth,
                           height: 3,
-                          color: Colors.red,
+                          color: CustomColor.dot,
                         ),
                       );
                     },
@@ -143,46 +471,52 @@ class _QrScanScreenState extends State<QrScanScreen>
               ),
             ),
 
-            /// 🔙 Back Button
+            // Back button
             Positioned(
-              top: 10,
-              left: 10,
+              top: size.height * 0.02,
+              left: size.width * 0.02,
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back,
                   color: CustomColor.mainText,
-                  size: 25,
+                  size: size.width * 0.06,
                 ),
                 onPressed: () => Get.back(),
               ),
             ),
 
-            /// 📏 Zoom Slider + Scan Button (Bottom Section)
+            // Bottom Zoom Slider + Scan Button
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: EdgeInsets.only(bottom: size.height * 0.03),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 📏 Zoom Slider with - and +
+                    // Zoom Slider
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.04,
+                      ),
                       child: Row(
                         children: [
-                          const Icon(Icons.remove, color: CustomColor.slider),
+                          Icon(
+                            Icons.remove,
+                            color: CustomColor.slider,
+                            size: size.width * 0.06,
+                          ),
                           Expanded(
                             child: SliderTheme(
                               data: SliderTheme.of(context).copyWith(
-                                thumbShape: const ShadowSliderThumbShape(
-                                  thumbRadius: 6,
+                                thumbShape: ShadowSliderThumbShape(
+                                  thumbRadius: size.width * 0.015,
                                 ),
                               ),
                               child: Slider(
                                 value: zoomValue,
                                 min: 0.0,
                                 max: 1.0,
-                                activeColor: Colors.red,
+                                activeColor: CustomColor.dot,
                                 onChanged: (val) async {
                                   setState(() => zoomValue = val);
                                   await controller.setZoomScale(val);
@@ -190,43 +524,45 @@ class _QrScanScreenState extends State<QrScanScreen>
                               ),
                             ),
                           ),
-                          const Icon(Icons.add, color: CustomColor.slider),
+                          Icon(
+                            Icons.add,
+                            color: CustomColor.slider,
+                            size: size.width * 0.06,
+                          ),
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: size.height * 0.02),
 
-                    // 🔘 Scan Button
+                    // Scan Button
                     Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        width: 364,
-                        height: 67,
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => const UserDetailScreen());
-                          },
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: CustomColor.mainText,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.05,
+                      ),
+                      child: GestureDetector(
+                        onTap: () => Get.to(() => const UserDetailScreen()),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: size.height * 0.08,
+                              decoration: BoxDecoration(
+                                color: CustomColor.mainText,
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              Positioned(
-                                left: 120,
-                                top: -40,
-                                child: Image.asset(
-                                  "assets/images/QR.1.png",
-                                  width: 90,
-                                  height: 90,
-                                ),
+                            ),
+                            Positioned(
+                              left: size.width * 0.33,
+                              top: -size.width * 0.12,
+                              child: Image.asset(
+                                "assets/images/QR.1.png",
+                                width: size.width * 0.25,
+                                height: size.width * 0.25,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -240,35 +576,33 @@ class _QrScanScreenState extends State<QrScanScreen>
     );
   }
 
-  /// 🔵 Build only blue corner edges
-  Widget _buildCorner(Alignment alignment) {
+  Widget _buildCorner(Alignment alignment, double size, double borderWidth) {
     return Align(
       alignment: alignment,
       child: Container(
-        width: 60,
-        height: 60,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
-          // borderRadius: BorderRadius.circular(10),
           border: Border(
             top:
                 alignment == Alignment.topLeft ||
                     alignment == Alignment.topRight
-                ? const BorderSide(color: Colors.blue, width: 15)
+                ? BorderSide(color: CustomColor.mainText, width: borderWidth)
                 : BorderSide.none,
             left:
                 alignment == Alignment.topLeft ||
                     alignment == Alignment.bottomLeft
-                ? const BorderSide(color: Colors.blue, width: 15)
+                ? BorderSide(color: CustomColor.mainText, width: borderWidth)
                 : BorderSide.none,
             right:
                 alignment == Alignment.topRight ||
                     alignment == Alignment.bottomRight
-                ? const BorderSide(color: Colors.blue, width: 15)
+                ? BorderSide(color: CustomColor.mainText, width: borderWidth)
                 : BorderSide.none,
             bottom:
                 alignment == Alignment.bottomLeft ||
                     alignment == Alignment.bottomRight
-                ? const BorderSide(color: Colors.blue, width: 15)
+                ? BorderSide(color: CustomColor.mainText, width: borderWidth)
                 : BorderSide.none,
           ),
         ),
@@ -277,16 +611,15 @@ class _QrScanScreenState extends State<QrScanScreen>
   }
 }
 
-/// ✅ Custom thumb with shadow
+/// Custom thumb with shadow
 class ShadowSliderThumbShape extends SliderComponentShape {
   final double thumbRadius;
 
   const ShadowSliderThumbShape({this.thumbRadius = 8});
 
   @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.fromRadius(thumbRadius);
-  }
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      Size.fromRadius(thumbRadius);
 
   @override
   void paint(
@@ -311,7 +644,8 @@ class ShadowSliderThumbShape extends SliderComponentShape {
 
     canvas.drawCircle(center, thumbRadius + 2, shadowPaint);
 
-    final thumbPaint = Paint()..color = sliderTheme.thumbColor ?? Colors.red;
+    final thumbPaint = Paint()
+      ..color = sliderTheme.thumbColor ?? CustomColor.dot;
     canvas.drawCircle(center, thumbRadius, thumbPaint);
   }
 }
