@@ -1,6 +1,9 @@
 import 'package:bmw_passes/screens/auth/login_screen.dart';
+import 'package:bmw_passes/screens/home/qe_code_scanning_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../auth/login_controller.dart'; // import controller
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -27,9 +30,18 @@ class SplashController extends GetxController
 
     animationController.forward();
 
-    // Navigate to login screen after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.offAll(() => const LoginScreen());
+    /// After splash, check login status
+    Future.delayed(const Duration(seconds: 3), () async {
+      final loginController = Get.put(LoginController());
+      bool valid = await loginController.isSessionValid();
+
+      if (valid) {
+        /// ✅ Logged in & session not expired
+        Get.offAll(() => const QrScanScreen());
+      } else {
+        /// ❌ No token or expired session
+        Get.offAll(() => const LoginScreen());
+      }
     });
   }
 

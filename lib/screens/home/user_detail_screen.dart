@@ -1,322 +1,192 @@
-// import 'package:bmw_passes/constants/custom_color.dart';
-// import 'package:bmw_passes/constants/custom_style.dart';
-// import 'package:flutter/material.dart';
-//
-// class UserDetailScreen extends StatelessWidget {
-//   const UserDetailScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           padding: const EdgeInsets.all(16),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               // Back arrow
-//               Align(
-//                 alignment: Alignment.centerLeft,
-//                 child: Icon(Icons.arrow_back, color: Colors.blue[800]),
-//               ),
-//               const SizedBox(height: 20),
-//
-//               // Profile Image + Verified Badge
-//               Stack(
-//                 alignment: Alignment.bottomRight,
-//                 children: [
-//                   const CircleAvatar(
-//                     radius: 50,
-//                     backgroundImage: NetworkImage(
-//                       "https://i.pravatar.cc/150?img=3",
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: const EdgeInsets.all(4),
-//                     decoration: const BoxDecoration(
-//                       color: Colors.red,
-//                       shape: BoxShape.circle,
-//                     ),
-//                     child: const Icon(
-//                       Icons.verified,
-//                       color: Colors.white,
-//                       size: 20,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               const SizedBox(height: 12),
-//
-//               // Name + subtitle
-//               Text("John Adams", style: CustomStyle.loginText),
-//               Text(
-//                 "Lorem Ipsum is simply dummy text",
-//                 style: CustomStyle.contentText,
-//               ),
-//               const SizedBox(height: 24),
-//
-//               // Personal Info Section
-//               const SectionTitle(title: "Personal Information"),
-//               const InfoCard(
-//                 label: "Customer Id:",
-//                 value: "BHCHCDVFDYG7e7eee76r7e6rSY",
-//               ),
-//               const Row(
-//                 children: [
-//                   Expanded(
-//                     child: InfoCard(label: "First Name:", value: "John"),
-//                   ),
-//                   SizedBox(width: 8),
-//                   Expanded(
-//                     child: InfoCard(label: "Last Name:", value: "Adams"),
-//                   ),
-//                 ],
-//               ),
-//               const InfoCard(label: "Email:", value: "johnadams7224@gmail.com"),
-//               const Row(
-//                 children: [
-//                   Expanded(
-//                     child: InfoCard(label: "Contact:", value: "756756567658"),
-//                   ),
-//                   SizedBox(width: 8),
-//                   Expanded(
-//                     child: InfoCard(
-//                       label: "Date Of Birth:",
-//                       value: "2001-02-04",
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               const InfoCard(label: "Preferred Language:", value: "English"),
-//               const Row(
-//                 children: [
-//                   Expanded(
-//                     child: InfoCard(label: "City:", value: "Taxila Cantt"),
-//                   ),
-//                   SizedBox(width: 8),
-//                   Expanded(
-//                     child: InfoCard(
-//                       label: "Country/State:",
-//                       value: "Atlantic Islands",
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//
-//               const SizedBox(height: 20),
-//               const SectionTitle(title: "Others"),
-//
-//               Row(
-//                 children: [
-//                   Expanded(
-//                     child: InfoCard(
-//                       label: "Pass Type:  ",
-//                       value: "BMW M Accessorized",
-//                       leading: Icon(Icons.directions_car, color: Colors.black),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               const Row(
-//                 children: [
-//                   Expanded(
-//                     child: InfoCard(label: "M Model:", value: "4546"),
-//                   ),
-//                   SizedBox(width: 8),
-//                   Expanded(
-//                     child: InfoCard(label: "VIN Model:", value: "5656"),
-//                   ),
-//                 ],
-//               ),
-//               const InfoCard(label: "Network ID:", value: "465465768787564"),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// // Section Title
-// class SectionTitle extends StatelessWidget {
-//   final String title;
-//   const SectionTitle({super.key, required this.title});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Align(
-//       alignment: Alignment.centerLeft,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(vertical: 8),
-//         child: Text(title, style: CustomStyle.sectionTitle),
-//       ),
-//     );
-//   }
-// }
-//
-// // InfoCard Widget
-// class InfoCard extends StatelessWidget {
-//   final String label;
-//   final String value;
-//   final Widget? leading;
-//
-//   const InfoCard({
-//     super.key,
-//     required this.label,
-//     required this.value,
-//     this.leading,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(vertical: 4),
-//       padding: const EdgeInsets.all(12),
-//       decoration: BoxDecoration(
-//         border: Border.all(color: CustomColor.contentText),
-//         borderRadius: BorderRadius.circular(10),
-//       ),
-//       child: Row(
-//         children: [
-//           if (leading != null) ...[leading!, const SizedBox(width: 8)],
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   label,
-//                   style: CustomStyle.infoLabel.copyWith(
-//                     color: CustomColor.mainText,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 2),
-//                 Text(
-//                   value,
-//                   style: CustomStyle.infoValue.copyWith(
-//                     color: CustomColor.contentText,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+ 
+import 'package:bmw_passes/constants/custom_color.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants/custom_style.dart';
 import '../../constants/info_card.dart';
 import '../../constants/section_title.dart';
+import '../../widgets/pass_type.dart';
 
 class UserDetailScreen extends StatelessWidget {
-  const UserDetailScreen({super.key});
+  final Map<String, dynamic> userData;
+
+  const UserDetailScreen({super.key, required this.userData});
+
+
+  String formatDate(String? dateString) {
+  if (dateString == null || dateString.isEmpty) return "";
+  try {
+    DateTime parsedDate = DateTime.parse(dateString); // e.g. "2025-07-25"
+    return DateFormat("dd MMMM yyyy").format(parsedDate); 
+    // Output: "25 July 2025"
+  } catch (e) {
+    return dateString; // fallback if parsing fails
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final avatarRadius = size.width * 0.18;
+    final spacing = size.height * 0.02;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CustomColor.screenBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.04,
+            vertical: spacing,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Back arrow
+              /// 🔙 Back
               Align(
                 alignment: Alignment.centerLeft,
-                child: Icon(Icons.arrow_back, color: Colors.blue[800]),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back, color: CustomColor.mainText),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
-              const SizedBox(height: 20),
 
-              // Profile Image + Verified Badge
+              SizedBox(height: spacing),
+
+              /// 👤 Profile Image
               Stack(
-                alignment: Alignment.bottomRight,
+                clipBehavior: Clip.none,
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(
-                      "https://i.pravatar.cc/150?img=3",
-                    ),
-                  ),
                   Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+                    width: avatarRadius * 2,
+                    height: avatarRadius * 2,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: CustomColor.mainText, width: 3),
+                      borderRadius: BorderRadius.circular(28),
+                      image: DecorationImage(
+                        image: userData["profile_picture"] != null
+                            ? NetworkImage(userData["profile_picture"])
+                            : const NetworkImage(
+                            "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww"), // fallback
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.verified,
-                      color: Colors.white,
-                      size: 20,
+                  ),
+
+                  /// ✅ Verified
+                  Positioned(
+                    bottom: -5,
+                    right: -5,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: CustomColor.dot,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: CustomColor.dot, width: 2),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Icon(
+                        Icons.verified,
+                        color: CustomColor.screenBackground,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
 
-              // Name + subtitle
-              Text("John Adams", style: CustomStyle.loginText),
+              SizedBox(height: spacing * 0.6),
+
+              /// Name
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  "${userData["first_name"] ?? ""} ${userData["last_name"] ?? ""}",
+                  style: CustomStyle.loginText,
+                ),
+              ),
+
+              SizedBox(height: spacing * 0.3),
               Text(
-                "Lorem Ipsum is simply dummy text",
+                userData["email"] ?? "No Email Found",
                 style: CustomStyle.contentText,
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
 
-              // Personal Info Section
+              SizedBox(height: spacing),
+
+              /// 📌 Personal Info
               const SectionTitle(title: "Personal Information"),
-              const InfoCard(
-                label: "Customer Id:",
-                value: "BHCHCDVFDYG7e7eee76r7e6rSY",
-              ),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "First Name:", value: "John")),
-                  SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Last Name:", value: "Adams")),
-                ],
-              ),
-              const InfoCard(label: "Email:", value: "johnadams7224@gmail.com"),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "Contact:", value: "756756567658")),
-                  SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Date Of Birth:", value: "2001-02-04")),
-                ],
-              ),
-              const InfoCard(label: "Preferred Language:", value: "English"),
-              const Row(
-                children: [
-                  Expanded(child: InfoCard(label: "City:", value: "Taxila Cantt")),
-                  SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "Country/State:", value: "Atlantic Islands")),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-              const SectionTitle(title: "Others"),
-
+              InfoCard(label: "Customer Id:", value: userData["cs_id"] ?? ""),
               Row(
                 children: [
                   Expanded(
                     child: InfoCard(
-                      label: "Pass Type:",
-                      value: "BMW M Accessorized",
-                      leading: Icon(Icons.directions_car, color: Colors.black),
-                    ),
+                        label: "First Name:", value: userData["first_name"] ?? ""),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InfoCard(
+                        label: "Last Name:", value: userData["last_name"] ?? ""),
                   ),
                 ],
               ),
-              const Row(
+              InfoCard(label: "Email:", value: userData["email"] ?? ""),
+              Row(
                 children: [
-                  Expanded(child: InfoCard(label: "M Model:", value: "4546")),
-                  SizedBox(width: 8),
-                  Expanded(child: InfoCard(label: "VIN Model:", value: "5656")),
+                  Expanded(
+                    child: InfoCard(
+                        label: "Contact:", value: userData["contact"] ?? ""),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+  child: InfoCard(
+    label: "Start Date:",
+    value: formatDate(userData["start_date"]),
+  ),
+),
+
+                  // Expanded(
+                  //   child: InfoCard(
+                  //       label: "Start Date:", value: userData["start_date"] ?? ""),
+                  // ),
                 ],
               ),
-              const InfoCard(label: "Network ID:", value: "465465768787564"),
+              Row(
+                children: [
+                  Expanded(
+                    child: InfoCard(label: "City:", value: userData["city"] ?? ""),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InfoCard(
+                        label: "Country/State:",
+                        value: userData["country"] ?? ""),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: spacing),
+
+              /// 🚘 Car Info
+              const SectionTitle(title: "Others"),
+              PassTypeRow(),
+              Row(
+                children: [
+                  Expanded(
+                    child:
+                    InfoCard(label: "M Model:", value: userData["m_model"] ?? ""),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InfoCard(
+                        label: "VIN Number:", value: userData["vin_number"] ?? ""),
+                  ),
+                ],
+              ),
+              InfoCard(label: "Network ID:", value: userData["network_id"] ?? ""),
             ],
           ),
         ),

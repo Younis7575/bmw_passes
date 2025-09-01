@@ -1,10 +1,15 @@
+ 
 import 'dart:convert';
 import 'dart:developer';
+import 'package:bmw_passes/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'login_model.dart';
 import '../home/qe_code_scanning_screen.dart';
+
 
 class LoginController extends GetxController {
   final usernameController = TextEditingController();
@@ -12,6 +17,33 @@ class LoginController extends GetxController {
 
   final formKey = GlobalKey<FormState>();
   var isLoading = false.obs;
+
+Future<void> saveLoginSession(String token) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString("auth_token", token);
+  await prefs.setString("login_time", DateTime.now().toIso8601String());
+}
+Future<bool> isSessionValid() async {
+  final prefs = await SharedPreferences.getInstance();
+  final loginTimeString = prefs.getString("login_time");
+  final token = prefs.getString("auth_token");
+
+  if (token == null || loginTimeString == null) {
+    return false; // no session
+  }
+
+  final loginTime = DateTime.parse(loginTimeString);
+  final now = DateTime.now();
+  final difference = now.difference(loginTime).inDays;
+
+  if (difference >= 30) {
+    await prefs.clear(); // session expired
+    return false;
+  }
+
+  return true;
+}
+
 
   // Username Validation
   String? validateUsername(String? value) {
@@ -42,7 +74,7 @@ class LoginController extends GetxController {
         url,
         headers: {
           "Accept": "application/json",
-          "X-APP-SECRET": "73706d652d6170706c69636174696f6e2d373836",
+          "X-APP-KEY": "73706d652d6170706c69636174696f6e2d373836",
         },
         body: {
           "user_name": usernameController.text.trim(),
@@ -52,9 +84,14 @@ class LoginController extends GetxController {
 
       log("Login response=> ${response.body}");
       if (response.statusCode == 200 || response.statusCode == 201) {
-        log("Login Status=> ${response.statusCode}");
         var data = jsonDecode(response.body);
         var loginModel = LoginModel.fromJson(data);
+
+ /// ✅ Save token + login time consistently
+  await saveLoginSession(loginModel.token ?? "");
+        /// ✅ Store token in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("access_token", loginModel.token ?? "");
 
         Get.snackbar(
           "Success",
@@ -83,6 +120,48 @@ class LoginController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// ✅ Logout Function
+  Future<void> logout() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("access_token");
+
+      if (token != null && token.isNotEmpty) {
+        var url = Uri.parse("https://spmetesting.com/api/auth/logout.php"); // replace with actual logout endpoint
+        var response = await http.post(
+          url,
+          headers: {
+            "Accept": "application/json",
+            "X-API-ACCESS-TOKEN": "$token",
+            "X-APP-KEY": "73706d652d6170706c69636174696f6e2d373836",
+          },
+        );
+
+        log("Logout response=> ${response.body}");
+      }
+
+      /// ✅ Clear stored token
+      await prefs.remove("access_token");
+
+      /// ✅ Navigate back to login screen
+      Get.offAll(() => const LoginScreen());
+
+      Get.snackbar(
+        "Logged Out",
+        "You have been logged out successfully",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Logout failed: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
