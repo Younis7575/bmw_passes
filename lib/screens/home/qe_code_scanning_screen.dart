@@ -231,7 +231,15 @@ void reassemble() {
   }
 }
 
- 
+// @override
+// void reassemble() {
+//   super.reassemble();
+//   if (defaultTargetPlatform == TargetPlatform.android) {
+//     controller.stop();
+//   }
+//   controller.start();
+// }
+
 
   @override
   Widget build(BuildContext context) {
