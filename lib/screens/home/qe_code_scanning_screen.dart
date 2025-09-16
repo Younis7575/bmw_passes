@@ -195,51 +195,49 @@ class _QrScanScreenState extends State<QrScanScreen>
   late AnimationController _animController;
   late Animation<double> _positionAnimation;
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  // controller.start(); // 🔑 Ensure camera session starts
+    // controller.start(); // 🔑 Ensure camera session starts
 
-  _animController = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 2),
-  )..repeat(reverse: true);
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
 
-  _positionAnimation = Tween<double>(
-    begin: -1,
-    end: 1,
-  ).animate(_animController);
-}
-
-
-@override
-void dispose() {
-  controller.dispose(); // 🔑 Release camera properly
-  _animController.dispose();
-  super.dispose();
-}
-
-@override
-void reassemble() {
-  super.reassemble();
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    controller.stop();
+    _positionAnimation = Tween<double>(
+      begin: -1,
+      end: 1,
+    ).animate(_animController);
   }
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
-    controller.start();
+
+  @override
+  void dispose() {
+    controller.dispose(); // 🔑 Release camera properly
+    _animController.dispose();
+    super.dispose();
   }
-}
 
-// @override
-// void reassemble() {
-//   super.reassemble();
-//   if (defaultTargetPlatform == TargetPlatform.android) {
-//     controller.stop();
-//   }
-//   controller.start();
-// }
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      controller.stop();
+    }
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      controller.start();
+    }
+  }
 
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   if (defaultTargetPlatform == TargetPlatform.android) {
+  //     controller.stop();
+  //   }
+  //   controller.start();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -348,16 +346,16 @@ void reassemble() {
               left: 10,
               right: 10,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: CustomColor.mainText,
-                      size: 25,
-                    ),
-                    onPressed: () => Get.back(),
-                  ),
+                  // IconButton(
+                  //   icon: const Icon(
+                  //     Icons.arrow_back,
+                  //     color: CustomColor.mainText,
+                  //     size: 25,
+                  //   ),
+                  //   onPressed: () => Get.back(),
+                  // ),
                   IconButton(
                     icon: const Icon(
                       Icons.logout_outlined,
@@ -434,7 +432,7 @@ void reassemble() {
                                 ),
                               ),
                               Positioned(
-                                left: 120,
+                                left: 130,
                                 top: -40,
                                 child: Image.asset(
                                   "assets/images/QR.1.png",
@@ -512,8 +510,7 @@ void reassemble() {
                           },
                         ),
                       ),
-
-                   ],
+                    ],
                   ),
                 ),
               ),

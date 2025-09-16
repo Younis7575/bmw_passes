@@ -1,4 +1,3 @@
- 
 import 'package:bmw_passes/constants/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,18 +12,16 @@ class UserDetailScreen extends StatelessWidget {
 
   const UserDetailScreen({super.key, required this.userData});
 
-
   String formatDate(String? dateString) {
-  if (dateString == null || dateString.isEmpty) return "";
-  try {
-    DateTime parsedDate = DateTime.parse(dateString); // e.g. "2025-07-25"
-    return DateFormat("dd MMMM yyyy").format(parsedDate); 
-    // Output: "25 July 2025"
-  } catch (e) {
-    return dateString; // fallback if parsing fails
+    if (dateString == null || dateString.isEmpty) return "";
+    try {
+      DateTime parsedDate = DateTime.parse(dateString); // e.g. "2025-07-25"
+      return DateFormat("dd MMMM yyyy").format(parsedDate);
+      // Output: "25 July 2025"
+    } catch (e) {
+      return dateString; // fallback if parsing fails
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +56,8 @@ class UserDetailScreen extends StatelessWidget {
                 clipBehavior: Clip.none,
                 children: [
                   Container(
-                    width: avatarRadius * 2,
-                    height: avatarRadius * 2,
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
                       border: Border.all(color: CustomColor.mainText, width: 3),
                       borderRadius: BorderRadius.circular(28),
@@ -68,7 +65,8 @@ class UserDetailScreen extends StatelessWidget {
                         image: userData["profile_picture"] != null
                             ? NetworkImage(userData["profile_picture"])
                             : const NetworkImage(
-                            "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww"), // fallback
+                                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww",
+                              ), // fallback
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -108,13 +106,12 @@ class UserDetailScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: spacing * 0.3),
-              Text(
-                userData["email"] ?? "No Email Found",
-                style: CustomStyle.contentText,
-                textAlign: TextAlign.center,
-              ),
-
+              // SizedBox(height: spacing * 0.3),
+              // Text(
+              //   userData["email"] ?? "No Email Found",
+              //   style: CustomStyle.contentText,
+              //   textAlign: TextAlign.center,
+              // ),
               SizedBox(height: spacing),
 
               /// 📌 Personal Info
@@ -124,12 +121,16 @@ class UserDetailScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: InfoCard(
-                        label: "First Name:", value: userData["first_name"] ?? ""),
+                      label: "First Name:",
+                      value: userData["first_name"] ?? "",
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: InfoCard(
-                        label: "Last Name:", value: userData["last_name"] ?? ""),
+                      label: "Last Name:",
+                      value: userData["last_name"] ?? "",
+                    ),
                   ),
                 ],
               ),
@@ -138,32 +139,49 @@ class UserDetailScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: InfoCard(
-                        label: "Contact:", value: userData["contact"] ?? ""),
+                      label: "Contact:",
+                      value: userData["contact"] ?? "",
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  Expanded(
-  child: InfoCard(
-    label: "Start Date:",
-    value: formatDate(userData["start_date"]),
-  ),
-),
 
                   // Expanded(
                   //   child: InfoCard(
-                  //       label: "Start Date:", value: userData["start_date"] ?? ""),
+                  //     label: "Date of birth:",
+                  //     value: formatDate(userData["start_date"]),
+                  //   ),
                   // ),
+                  Expanded(
+                    child: InfoCard(
+                      label: "Date of birth:",
+                      value: userData["start_date"] != null
+                          ? DateTime.parse(
+                              userData["start_date"],
+                            ).toString().split(' ')[0]
+                          : "",
+                    ),
+                  ),
                 ],
               ),
+              InfoCard(
+                label: "Preferred Language:",
+                value: userData["language"] ?? "English", // fallback English
+              ),
+
               Row(
                 children: [
                   Expanded(
-                    child: InfoCard(label: "City:", value: userData["city"] ?? ""),
+                    child: InfoCard(
+                      label: "City:",
+                      value: userData["city"] ?? "",
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: InfoCard(
-                        label: "Country/State:",
-                        value: userData["country"] ?? ""),
+                      label: "Country/State:",
+                      value: userData["country"] ?? "",
+                    ),
                   ),
                 ],
               ),
@@ -176,17 +194,24 @@ class UserDetailScreen extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child:
-                    InfoCard(label: "M Model:", value: userData["m_model"] ?? ""),
+                    child: InfoCard(
+                      label: "M Model:",
+                      value: userData["m_model"] ?? "",
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: InfoCard(
-                        label: "VIN Number:", value: userData["vin_number"] ?? ""),
+                      label: "VIN Number:",
+                      value: userData["vin_number"] ?? "",
+                    ),
                   ),
                 ],
               ),
-              InfoCard(label: "Network ID:", value: userData["network_id"] ?? ""),
+              InfoCard(
+                label: "Network ID:",
+                value: userData["network_id"] ?? "",
+              ),
             ],
           ),
         ),

@@ -1,4 +1,181 @@
- 
+// import 'dart:convert';
+// import 'dart:developer';
+// import 'package:bmw_passes/screens/auth/login_screen.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:shared_preferences/shared_preferences.dart';
+
+// import 'login_model.dart';
+// import '../home/qe_code_scanning_screen.dart';
+
+// class LoginController extends GetxController {
+//   final usernameController = TextEditingController();
+//   final passwordController = TextEditingController();
+
+//   final formKey = GlobalKey<FormState>();
+//   var isLoading = false.obs;
+
+//   Future<void> saveLoginSession(String token) async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.setString("auth_token", token);
+//     await prefs.setString("login_time", DateTime.now().toIso8601String());
+//   }
+
+//   Future<bool> isSessionValid() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     final loginTimeString = prefs.getString("login_time");
+//     final token = prefs.getString("auth_token");
+
+//     if (token == null || loginTimeString == null) {
+//       return false; // no session
+//     }
+
+//     final loginTime = DateTime.parse(loginTimeString);
+//     final now = DateTime.now();
+//     final difference = now.difference(loginTime).inDays;
+
+//     if (difference >= 30) {
+//       await prefs.clear(); // session expired
+//       return false;
+//     }
+
+//     return true;
+//   }
+
+//   // Username Validation
+//   String? validateUsername(String? value) {
+//     if (value == null || value.isEmpty) {
+//       return "Username cannot be empty";
+//     }
+//     return null;
+//   }
+
+//   // Password Validation
+//   String? validatePassword(String? value) {
+//     if (value == null || value.isEmpty) {
+//       return "Password cannot be empty";
+//     }
+//     return null;
+//   }
+
+//   // Login Function with API
+//   Future<void> login() async {
+//     if (!formKey.currentState!.validate()) return;
+
+//     isLoading.value = true;
+//     try {
+//       var url = Uri.parse(
+//         "https://spmetesting.com/api/auth/login.php",
+//       ); // replace with actual login endpoint
+//       var response = await http.post(
+//         url,
+//         headers: {
+//           "Accept": "application/json",
+//           "X-APP-KEY": "73706d652d6170706c69636174696f6e2d373836",
+//         },
+//         body: {
+//           "user_name": usernameController.text.trim(),
+//           "password": passwordController.text.trim(),
+//         },
+//       );
+
+//       log("Login response=> ${response.body}");
+//       if (response.statusCode == 200 || response.statusCode == 201) {
+//         var data = jsonDecode(response.body);
+//         var loginModel = LoginModel.fromJson(data);
+
+//         /// ✅ Save token + login time consistently
+//         await saveLoginSession(loginModel.token ?? "");
+
+//         /// ✅ Store token in SharedPreferences
+//         SharedPreferences prefs = await SharedPreferences.getInstance();
+//         await prefs.setString("access_token", loginModel.token ?? "");
+
+//         Get.snackbar(
+//           "Success",
+//           loginModel.message,
+//           snackPosition: SnackPosition.BOTTOM,
+//         );
+
+//         // Navigate to QR Screen
+//         Get.offAll(() => const QrScanScreen());
+//       } else {
+//         Get.snackbar(
+//           "Error",
+//           "Login failed",
+//           snackPosition: SnackPosition.TOP,
+//           backgroundColor: Colors.red,
+//           colorText: Colors.white,
+//         );
+//       }
+//     } catch (e) {
+//       Get.snackbar(
+//         "Error",
+//         e.toString(),
+//         snackPosition: SnackPosition.TOP,
+//         backgroundColor: Colors.red,
+//         colorText: Colors.white,
+//       );
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
+
+//   /// ✅ Logout Function
+//   Future<void> logout() async {
+//     try {
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       String? token = prefs.getString("access_token");
+
+//       if (token != null && token.isNotEmpty) {
+//         var url = Uri.parse(
+//           "https://spmetesting.com/api/auth/logout.php",
+//         ); // replace with actual logout endpoint
+//         var response = await http.post(
+//           url,
+//           headers: {
+//             "Accept": "application/json",
+//             "X-API-ACCESS-TOKEN": "$token",
+//             "X-APP-KEY": "73706d652d6170706c69636174696f6e2d373836",
+//           },
+//         );
+
+//         log("Logout response=> ${response.body}");
+//       }
+
+//       /// ✅ Clear stored token
+//       await prefs.remove("access_token");
+
+//       /// ✅ Navigate back to login screen
+//       Get.offAll(() => const LoginScreen());
+
+//       Get.snackbar(
+//         "Logged Out",
+//         "You have been logged out successfully",
+//         snackPosition: SnackPosition.TOP,
+//       );
+//     } catch (e) {
+//       Get.snackbar(
+//         "Error",
+//         "Logout failed: $e",
+//         snackPosition: SnackPosition.TOP,
+//         backgroundColor: Colors.red,
+//         colorText: Colors.white,
+//       );
+//     }
+//   }
+
+//   @override
+//   void onClose() {
+//     usernameController.dispose();
+//     passwordController.dispose();
+//     super.onClose();
+//   }
+// }
+
+//update code
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:bmw_passes/screens/auth/login_screen.dart';
@@ -10,7 +187,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_model.dart';
 import '../home/qe_code_scanning_screen.dart';
 
-
 class LoginController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -18,32 +194,34 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   var isLoading = false.obs;
 
-Future<void> saveLoginSession(String token) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString("auth_token", token);
-  await prefs.setString("login_time", DateTime.now().toIso8601String());
-}
-Future<bool> isSessionValid() async {
-  final prefs = await SharedPreferences.getInstance();
-  final loginTimeString = prefs.getString("login_time");
-  final token = prefs.getString("auth_token");
-
-  if (token == null || loginTimeString == null) {
-    return false; // no session
+  /// ✅ Save login session with token + login time
+  Future<void> saveLoginSession(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("auth_token", token);
+    await prefs.setString("login_time", DateTime.now().toIso8601String());
   }
 
-  final loginTime = DateTime.parse(loginTimeString);
-  final now = DateTime.now();
-  final difference = now.difference(loginTime).inDays;
+  /// ✅ Check if session is still valid (15 min)
+  Future<bool> isSessionValid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final loginTimeString = prefs.getString("login_time");
+    final token = prefs.getString("auth_token");
 
-  if (difference >= 30) {
-    await prefs.clear(); // session expired
-    return false;
+    if (token == null || loginTimeString == null) {
+      return false; // no session found
+    }
+
+    final loginTime = DateTime.parse(loginTimeString);
+    final now = DateTime.now();
+    final difference = now.difference(loginTime).inMinutes;
+
+    if (difference >= 15) {
+      await prefs.clear(); // session expired
+      return false;
+    }
+
+    return true;
   }
-
-  return true;
-}
-
 
   // Username Validation
   String? validateUsername(String? value) {
@@ -61,15 +239,13 @@ Future<bool> isSessionValid() async {
     return null;
   }
 
-  // Login Function with API
+  // ✅ Login Function with API
   Future<void> login() async {
     if (!formKey.currentState!.validate()) return;
 
     isLoading.value = true;
     try {
-      var url = Uri.parse(
-        "https://spmetesting.com/api/auth/login.php",
-      ); // replace with actual login endpoint
+      var url = Uri.parse("https://spmetesting.com/api/auth/login.php");
       var response = await http.post(
         url,
         headers: {
@@ -87,9 +263,10 @@ Future<bool> isSessionValid() async {
         var data = jsonDecode(response.body);
         var loginModel = LoginModel.fromJson(data);
 
- /// ✅ Save token + login time consistently
-  await saveLoginSession(loginModel.token ?? "");
-        /// ✅ Store token in SharedPreferences
+        /// ✅ Save token + login time
+        await saveLoginSession(loginModel.token ?? "");
+
+        /// ✅ Store token separately also
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("access_token", loginModel.token ?? "");
 
@@ -99,13 +276,13 @@ Future<bool> isSessionValid() async {
           snackPosition: SnackPosition.BOTTOM,
         );
 
-        // Navigate to QR Screen
+        // ✅ Navigate to QR Scan Screen
         Get.offAll(() => const QrScanScreen());
       } else {
         Get.snackbar(
           "Error",
           "Login failed",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
@@ -114,7 +291,7 @@ Future<bool> isSessionValid() async {
       Get.snackbar(
         "Error",
         e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -130,7 +307,7 @@ Future<bool> isSessionValid() async {
       String? token = prefs.getString("access_token");
 
       if (token != null && token.isNotEmpty) {
-        var url = Uri.parse("https://spmetesting.com/api/auth/logout.php"); // replace with actual logout endpoint
+        var url = Uri.parse("https://spmetesting.com/api/auth/logout.php");
         var response = await http.post(
           url,
           headers: {
@@ -144,7 +321,7 @@ Future<bool> isSessionValid() async {
       }
 
       /// ✅ Clear stored token
-      await prefs.remove("access_token");
+      await prefs.clear();
 
       /// ✅ Navigate back to login screen
       Get.offAll(() => const LoginScreen());
@@ -152,13 +329,13 @@ Future<bool> isSessionValid() async {
       Get.snackbar(
         "Logged Out",
         "You have been logged out successfully",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
       Get.snackbar(
         "Error",
         "Logout failed: $e",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
