@@ -139,12 +139,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> requestAllPermissions() async {
   final statuses = await [
     Permission.camera,
-    Permission.microphone,
-    Permission.location,
-    Permission.storage, // works until API 32
-    Permission.photos, // iOS only
-    Permission.videos, // iOS only
-    Permission.audio, // iOS only
+    // Permission.microphone,
+    // Permission.location,
+    // Permission.storage, // works until API 32
+    // Permission.photos, // iOS only
+    // Permission.videos, // iOS only
+    // Permission.audio, // iOS only
   ].request();
 
   statuses.forEach((perm, status) {
