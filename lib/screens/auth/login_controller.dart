@@ -265,6 +265,8 @@ class LoginController extends GetxController {
           "Success",
           loginModel.message,
           snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
         );
 
         // ✅ Navigate to QR Screen
@@ -272,7 +274,7 @@ class LoginController extends GetxController {
       } else {
         Get.snackbar(
           "Error",
-          "Login failed",
+          "User Not Found",
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           colorText: Colors.white,
