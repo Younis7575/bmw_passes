@@ -90,26 +90,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// ✅ Request camera permission safely
 Future<void> requestCameraPermission() async {
-  // Pehle current status check karien
-  final currentStatus = await Permission.camera.status;
-
-  if (currentStatus.isPermanentlyDenied) {
-    // Agar pehle hi permanently deny hai to directly settings kholain
-    debugPrint("⚠️ Camera permission permanently denied");
-    Get.defaultDialog(
-      title: "Permission Required",
-      middleText:
-          "Camera access is needed to scan QR codes. Please enable it in Settings.",
-      textConfirm: "Go to Settings",
-      textCancel: "Cancel",
-      onConfirm: () {
-        openAppSettings();
-      },
-    );
-    return;
-  }
-
-  // Nahin to normal request karien
   final status = await Permission.camera.request();
 
   if (status.isGranted) {
@@ -166,7 +146,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ✅ App launch hote hi permission maango
-  await requestCameraPermission();
+  // await requestCameraPermission();
 
   // ✅ Check login session
   bool loggedIn = await isSessionValid();

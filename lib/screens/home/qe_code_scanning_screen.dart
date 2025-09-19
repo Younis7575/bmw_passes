@@ -1193,6 +1193,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                     ],
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
