@@ -7,27 +7,58 @@ import '../../constants/info_card.dart';
 import '../../constants/section_title.dart';
 import '../../widgets/pass_type.dart';
 
-class UserDetailScreen extends StatelessWidget {
+class UserDetailScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
 
   const UserDetailScreen({super.key, required this.userData});
+
+  @override
+  _UserDetailScreenState createState() => _UserDetailScreenState();
+}
+
+class _UserDetailScreenState extends State<UserDetailScreen> {
+  late Map<String, dynamic> userData;
+
+  @override
+  void initState() {
+    super.initState();
+    userData = widget.userData;
+  }
 
   String formatDate(String? dateString) {
     if (dateString == null || dateString.isEmpty) return "";
     try {
       DateTime parsedDate = DateTime.parse(dateString); // e.g. "2025-07-25"
-      return DateFormat("dd MMMM yyyy").format(parsedDate);
-      // Output: "25 July 2025"
+      return DateFormat("yyyy-MM-dd").format(parsedDate);
     } catch (e) {
-      return dateString; // fallback if parsing fails
+      return dateString;
     }
+  }
+
+  String getPreferredLanguage() {
+    String lang = (userData["preferred_language"] ?? "").toString().trim();
+    return lang.isNotEmpty ? lang : "Not Preferred";
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final avatarRadius = size.width * 0.18;
     final spacing = size.height * 0.02;
+
+    // 🔹 Profile picture URL logic
+    // String baseUrl =
+    //     "https://spmetesting.com/assets/uploads/customers/profiles/";
+    // String? profilePic = userData["profile_picture"];
+    // String profileUrl = (profilePic != null && profilePic.isNotEmpty)
+    //     ? "$baseUrl$profilePic"
+    //     : "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww";
+
+    String baseUrl =
+        "https://spmetesting.com/assets/uploads/customers/profiles/";
+    String? profilePic = userData["profile_picture"];
+    String profileUrl = (profilePic != null && profilePic.isNotEmpty)
+        ? "$baseUrl$profilePic"
+        : "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww";
 
     return Scaffold(
       backgroundColor: CustomColor.screenBackground,
@@ -55,19 +86,37 @@ class UserDetailScreen extends StatelessWidget {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
+                  // Container(
+                  //   width: 100,
+                  //   height: 100,
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: CustomColor.mainText, width: 3),
+                  //     borderRadius: BorderRadius.circular(28),
+                  //     image: DecorationImage(
+                  //       image: NetworkImage(profileUrl),
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
                       border: Border.all(color: CustomColor.mainText, width: 3),
                       borderRadius: BorderRadius.circular(28),
-                      image: DecorationImage(
-                        image: userData["profile_picture"] != null
-                            ? NetworkImage(userData["profile_picture"])
-                            : const NetworkImage(
-                                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww",
-                              ), // fallback
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: Image.network(
+                        profileUrl,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          // agar koi bhi error aaye to fallback image show kare
+                          return Image.network(
+                            "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww",
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -106,12 +155,6 @@ class UserDetailScreen extends StatelessWidget {
                 ),
               ),
 
-              // SizedBox(height: spacing * 0.3),
-              // Text(
-              //   userData["email"] ?? "No Email Found",
-              //   style: CustomStyle.contentText,
-              //   textAlign: TextAlign.center,
-              // ),
               SizedBox(height: spacing),
 
               /// 📌 Personal Info
@@ -144,30 +187,18 @@ class UserDetailScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-
-                  // Expanded(
-                  //   child: InfoCard(
-                  //     label: "Date of birth:",
-                  //     value: formatDate(userData["start_date"]),
-                  //   ),
-                  // ),
                   Expanded(
                     child: InfoCard(
-                      label: "Date of birth:",
-                      value: userData["start_date"] != null
-                          ? DateTime.parse(
-                              userData["start_date"],
-                            ).toString().split(' ')[0]
-                          : "",
+                      label: "Date of Birth:",
+                      value: formatDate(userData["dob"]),
                     ),
                   ),
                 ],
               ),
               InfoCard(
                 label: "Preferred Language:",
-                value: userData["language"] ?? "English", // fallback English
+                value: getPreferredLanguage(),
               ),
-
               Row(
                 children: [
                   Expanded(
@@ -190,7 +221,12 @@ class UserDetailScreen extends StatelessWidget {
 
               /// 🚘 Car Info
               const SectionTitle(title: "Others"),
-              PassTypeRow(),
+              PassTypeRow(
+                passType: userData["is_bmw_m_accessorized"] == 1
+                    ? "BMW M Accessorized"
+                    : "BMW M",
+              ),
+
               Row(
                 children: [
                   Expanded(
